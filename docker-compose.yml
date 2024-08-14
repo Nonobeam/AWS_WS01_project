@@ -1,0 +1,59 @@
+services:
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+      - "8078:8078"
+    container_name: zookeeper
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: "yes"
+    networks:
+      - networks
+
+  login-service:
+    build:
+      context: ./Login
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    container_name: login-service
+    networks:
+      - networks
+
+  cart-service:
+    build:
+      context: ./Cart
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    container_name: cart-service
+    networks:
+      - networks
+
+  zookeeper-configuration-service:
+    build:
+      context: ./ZookeeperConfiguration
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    container_name: configuration
+    networks:
+      - networks
+
+  db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: QuizQueue
+      MYSQL_PASSWORD: 123
+    networks:
+      - networks
+  
+networks:
+  networks:
+    external: true

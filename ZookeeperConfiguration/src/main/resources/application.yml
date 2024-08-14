@@ -1,0 +1,17 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: ZookeeperConfiguration
+  profiles:
+    active: native
+  cloud:
+    zookeeper:
+      connect-string: "zookeeper:2181"
+    config:
+      server:
+        native:
+          search-locations: "classpath:/config"
+  config:
+    import: "zookeeper:"
